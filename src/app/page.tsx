@@ -1,113 +1,115 @@
-import Image from 'next/image';
+'use client';
+
+import dayjs, { Dayjs } from 'dayjs';
+
+import { useEffect, useState } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+
+let colStartClasses = [
+  '',
+  'col-start-2',
+  'col-start-3',
+  'col-start-4',
+  'col-start-5',
+  'col-start-6',
+  'col-start-7',
+];
 
 export default function Home() {
+  const today: Dayjs = dayjs();
+  const [selectedDay, setSelectedDay] = useState<Dayjs>(today);
+  const [currentMonth, setCurrentMonth] = useState<string>(
+    today.format('MMMM YYYY')
+  );
+  const [daysInCurrentMonth, setDaysInCurrentMonth] = useState<Dayjs[]>([]);
+
+  let dateOfMonth: Dayjs = dayjs(currentMonth).date(1);
+
+  const previousMonth = () => {
+    let previousMonth = dateOfMonth.subtract(1, 'month').format('MMMM YYYY');
+
+    setCurrentMonth(previousMonth);
+  };
+
+  const nextMonth = () => {
+    let nextMonth = dateOfMonth.add(1, 'month').format('MMMM YYYY');
+
+    setCurrentMonth(nextMonth);
+  };
+
+  useEffect(() => {
+    const year = dateOfMonth.get('year');
+    const month = dateOfMonth.get('month') + 1;
+    const daysInMonth = dateOfMonth.daysInMonth();
+
+    const tempDaysInMonth: Dayjs[] = [];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = dayjs(`${year}-${month}-${day}`);
+      tempDaysInMonth.push(date);
+    }
+
+    setDaysInCurrentMonth(tempDaysInMonth);
+  }, [currentMonth]);
+
+  const selectedDayButtonClick =
+    (day: Dayjs) =>
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      event.preventDefault();
+      setSelectedDay(day);
+    };
+
+  const dateGridClassNames = (...classes: any[]) => {
+    return classes.filter(Boolean).join(' ');
+  };
   return (
     <>
-      <div className='pt-50 pb-50 ml-300 bg-slate-300'>
-        <div className='w-auto'>
-          <div className='h-auto max-w-screen-md my-0 mx-auto'>
-            <div className=' bg-gradient-to-r from-cyan-500 to-blue-500 h-52 bg-center-right bg-cover'>
-              <div className='bg-slate-900 h-full p-20 text-white font-light relative'>
-                <a className='absolute cursor-pointer left-0 top-7/20 text-grey'>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke-width='1.5'
-                    stroke='currentColor'
-                    className='w-6 h-6'
-                  >
-                    <path
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      d='M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18'
-                    />
-                  </svg>
-                </a>
-                <a className='absolute cursor-pointer right-0 top-7/20 text-grey'>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke-width='1.5'
-                    stroke='currentColor'
-                    className='w-6 h-6'
-                  >
-                    <path
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      d='M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3'
-                    />
-                  </svg>
-                </a>
-
-                <div className='row pl-15/100'>
-                  <h3>8월</h3>
-                  <h5>오늘은 8월 9일입니다.</h5>
-                </div>
+      <div className='pt-16'>
+        <div className='max-w-md px-4 mx-auto sm:px-7 md:max-w-4x1 md:px-6'>
+          <div className='md:grid md:grid-cols-2 md:divide-x md:divide-gray-200'>
+            <div className='md:pr-14'>
+              <div className='flex items-center'>
+                <h2 className='flex-auto font-semibold text-gray-900'>
+                  {dateOfMonth.format('MMMM YYYY')}
+                </h2>
+                <button
+                  type='button'
+                  onClick={previousMonth}
+                  className='-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
+                >
+                  <span className='sr-only'>Previous month</span>
+                  <ChevronLeftIcon className='w-5 h-5' aria-hidden='true' />
+                </button>
+                <button
+                  onClick={nextMonth}
+                  type='button'
+                  className='-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
+                >
+                  <span className='sr-only'>Next month</span>
+                  <ChevronRightIcon className='w-5 h-5' aria-hidden='true' />
+                </button>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className='bg-white p-20 pl-15/100 pr-15/100 overflow-hidden'>
-          <div className='text-center'>
-            <div className='row flex'>
-              <div className='col grow'>월</div>
-              <div className='col grow'>화</div>
-              <div className='col grow'>수</div>
-              <div className='col grow'>목</div>
-              <div className='col grow'>금</div>
-              <div className='col grow'>토</div>
-              <div className='col grow'>일</div>
-            </div>
-          </div>
-          <div className='text-center'>
-            <div className='row flex'>
-              <div className='col grow'></div>
-              <div className='col grow'>1</div>
-              <div className='col grow'>2</div>
-              <div className='col grow'>3</div>
-              <div className='col grow'>4</div>
-              <div className='col grow'>5</div>
-              <div className='col grow'>6</div>
-            </div>
-            <div className='row flex'>
-              <div className='col grow'>7</div>
-              <div className='col grow'>8</div>
-              <div className='col grow'>9</div>
-              <div className='col grow'>10</div>
-              <div className='col grow'>11</div>
-              <div className='col grow'>12</div>
-              <div className='col grow'>13</div>
-            </div>
-            <div className='row flex'>
-              <div className='col grow'>14</div>
-              <div className='col grow'>15</div>
-              <div className='col grow'>16</div>
-              <div className='col grow'>17</div>
-              <div className='col grow'>18</div>
-              <div className='col grow'>19</div>
-              <div className='col grow'>20</div>
-            </div>
-            <div className='row flex'>
-              <div className='col grow'>21</div>
-              <div className='col grow'>22</div>
-              <div className='col grow'>23</div>
-              <div className='col grow'>24</div>
-              <div className='col grow'>25</div>
-              <div className='col grow'>26</div>
-              <div className='col grow'>27</div>
-            </div>
-
-            <div className='row flex'>
-              <div className='col grow'>28</div>
-              <div className='col grow'>29</div>
-              <div className='col grow'>30</div>
-              <div className='col grow'>31</div>
-              <div className='col grow'></div>
-              <div className='col grow'></div>
-              <div className='col grow'></div>
+              <div className='grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500'>
+                <div>S</div>
+                <div>M</div>
+                <div>T</div>
+                <div>W</div>
+                <div>T</div>
+                <div>F</div>
+                <div>S</div>
+              </div>
+              <div className='grid grid-cols-7 mt-2 text-sm'>
+                {daysInCurrentMonth.map((day, dayIndex) => (
+                  <div
+                    key={day.toString()}
+                    className={`${colStartClasses[day.get('day')]} py-1.5`}
+                  >
+                    <button type='button' onClick={selectedDayButtonClick(day)}>
+                      {day.get('date')}
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
