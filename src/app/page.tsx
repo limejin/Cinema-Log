@@ -59,9 +59,10 @@ export default function Home() {
       setSelectedDay(day);
     };
 
-  const dateGridClassNames = (...classes: any[]) => {
+  const filterClassNames = (...classes: any[]) => {
     return classes.filter(Boolean).join(' ');
   };
+
   return (
     <>
       <div className='pt-16'>
@@ -102,9 +103,41 @@ export default function Home() {
                 {daysInCurrentMonth.map((day, dayIndex) => (
                   <div
                     key={day.toString()}
-                    className={`${colStartClasses[day.get('day')]} py-1.5`}
+                    // className={`${colStartClasses[day.get('day')]} py-1.5`}
+                    className={filterClassNames(
+                      dayIndex === 0 && colStartClasses[day.get('day')],
+                      'py-1.5'
+                    )}
                   >
-                    <button type='button' onClick={selectedDayButtonClick(day)}>
+                    <button
+                      type='button'
+                      onClick={selectedDayButtonClick(day)}
+                      className={filterClassNames(
+                        day.isSame(selectedDay) && 'text-white',
+                        !day.isSame(selectedDay) &&
+                          day.isSame(dayjs(), 'day') &&
+                          'text-red-500',
+                        !day.isSame(selectedDay) &&
+                          !day.isSame(dayjs(), 'day') &&
+                          day.isSame(dateOfMonth, 'month') &&
+                          'text-gray-900',
+                        !day.isSame(selectedDay) &&
+                          !day.isSame(dayjs(), 'day') &&
+                          !day.isSame(dateOfMonth, 'month') &&
+                          'text-gray-400',
+                        day.isSame(selectedDay) &&
+                          day.isSame(dayjs(), 'day') &&
+                          'bg-red-500',
+                        day.isSame(selectedDay) &&
+                          !day.isSame(dayjs(), 'day') &&
+                          'bg-gray-900',
+                        !day.isSame(selectedDay) && 'hover:bg-gray-200',
+                        (day.isSame(selectedDay) ||
+                          day.isSame(dayjs(), 'day')) &&
+                          'font-semibold',
+                        'mx-auto flex h-8 w-8 items-center justify-center rounded-full'
+                      )}
+                    >
                       {day.get('date')}
                     </button>
                   </div>
