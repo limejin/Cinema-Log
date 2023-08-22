@@ -4,6 +4,8 @@ import dayjs, { Dayjs } from 'dayjs';
 
 import { useEffect, useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { format } from 'path';
+import Image from 'next/image';
 
 let colStartClasses = [
   '',
@@ -15,6 +17,17 @@ let colStartClasses = [
   'col-start-7',
 ];
 
+const cinemaLogs = [
+  {
+    id: 1,
+    name: '바비',
+    imageUrl:
+      'https://i.namu.wiki/i/-aJLl0K4fW_WDkzo0jyNZPQJH8e5X2J-D-CjjL7H_7xDqDVP1T0L_qM_Q91oo1RgjSwFHgLmyMbs85hR0FK2Bw.webp',
+    startTime: '2023-08-22T13:00',
+    endTime: '2023-08-22T15:00',
+  },
+];
+
 export default function Home() {
   const today: Dayjs = dayjs();
   const [selectedDay, setSelectedDay] = useState<Dayjs>(today);
@@ -24,6 +37,10 @@ export default function Home() {
   const [daysInCurrentMonth, setDaysInCurrentMonth] = useState<Dayjs[]>([]);
 
   let dateOfMonth: Dayjs = dayjs(currentMonth).date(1);
+
+  let cinemaLogsOfselectedDay = cinemaLogs.filter(cinemaLog =>
+    dayjs(cinemaLog.startTime).isSame(selectedDay, 'day')
+  );
 
   const previousMonth = () => {
     let previousMonth = dateOfMonth.subtract(1, 'month').format('MMMM YYYY');
@@ -138,12 +155,37 @@ export default function Home() {
                         'mx-auto flex h-8 w-8 items-center justify-center rounded-full'
                       )}
                     >
-                      {day.get('date')}
+                      <time dateTime={day.format('YYYY-MM-DD')}>
+                        {day.get('date')}
+                      </time>
                     </button>
                   </div>
                 ))}
               </div>
             </div>
+            <section className='mt-12 md:mt-0 md:p1-14'>
+              <h2 className='font-semibold text-gray-900'>
+                <time dateTime={selectedDay.format('YYYY-MM-DD')}>
+                  {selectedDay.format('YYYY년 MM월 DD일')}
+                </time>{' '}
+                cinema log...
+              </h2>
+              <ol className='mt-4 space-y-1 text-sm leading-6 text-gray-500'>
+                {cinemaLogsOfselectedDay.length > 0 ? (
+                  cinemaLogsOfselectedDay.map(cinemalog => (
+                    <Image
+                      key={cinemalog.id}
+                      src={cinemalog.imageUrl}
+                      alt={cinemalog.name}
+                      width={300}
+                      height={300}
+                    ></Image>
+                  ))
+                ) : (
+                  <p>Would you like to create a log?</p>
+                )}
+              </ol>
+            </section>
           </div>
         </div>
       </div>
