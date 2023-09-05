@@ -15,6 +15,7 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
     "dayjs": "^1.11.9",
+    "emoji-picker-react": "^4.4.12",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.13",
     "heroicons": "^2.0.18",
