@@ -1,11 +1,37 @@
 import dayjs from 'dayjs';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function LogModal(setOpenCreateCinemaLog: any) {
   const [showEmojiPickerButton, setShowEmojiPickerButton] = useState(false);
   const [emojiPicked, setEmojiPicked] = useState('❔');
-  const searchMovie = () => {};
+
+  const [searchMovieWord, setSearchMovieWord] = useState<String>('');
+
+  const searchMovie = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value != null) {
+      setSearchMovieWord(event.target.value);
+    }
+  };
+
+  const [movieList, setMovieList] = useState<String[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/search/keyword?api_key=${process.env.NEXT_PUBLIC_API_KEY}&query=${searchMovieWord}`
+      );
+
+      const { results } = await response.json();
+
+      let resultsArray: String[] = [];
+      results.map((result: any) => {
+        resultsArray.push(result.name);
+      });
+      setMovieList(resultsArray);
+    })();
+  }, [searchMovieWord]);
+
   const [logDate, setLogDate] = useState<String>('');
   const showEmojiPicker = (event: any) => {
     event.preventDefault();
