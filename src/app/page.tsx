@@ -23,8 +23,8 @@ const cinemaLogs = [
     name: '바비',
     imageUrl:
       'https://i.namu.wiki/i/-aJLl0K4fW_WDkzo0jyNZPQJH8e5X2J-D-CjjL7H_7xDqDVP1T0L_qM_Q91oo1RgjSwFHgLmyMbs85hR0FK2Bw.webp',
-    startTime: '2023-08-22T13:00',
-    endTime: '2023-08-22T15:00',
+    startTime: '2023-09-20T13:00',
+    endTime: '2023-09-20T15:00',
   },
 ];
 

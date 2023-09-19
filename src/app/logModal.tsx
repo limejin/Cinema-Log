@@ -8,6 +8,9 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
 
   const [searchMovieWord, setSearchMovieWord] = useState<String>('');
 
+  const [movieName, setMovieName] = useState<
+    string | number | readonly string[] | undefined
+  >('');
   const searchMovie = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value != null) {
       setSearchMovieWord(event.target.value);
@@ -16,6 +19,7 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
 
   const [movieList, setMovieList] = useState<String[]>([]);
 
+  console.log(movieList);
   useEffect(() => {
     (async () => {
       const response = await fetch(
@@ -48,6 +52,17 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
   const changeEmojiPicked = (emojiData: EmojiClickData, event: MouseEvent) => {
     setEmojiPicked(emojiData.emoji);
     setShowEmojiPickerButton(!showEmojiPickerButton);
+  };
+
+  const onClickMovieName = (
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
+  ) => {
+    setMovieName(event.currentTarget.innerText);
+    setMovieList([]);
+  };
+
+  const clickSubmitButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    //영화 데이터 전송
   };
 
   return (
@@ -93,7 +108,26 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
                   placeholder='영화 이름을 검색해주세요.'
                   id='search_movie'
                   onChange={searchMovie}
+                  value={movieName}
                 ></input>
+                {movieList.length > 0 && (
+                  <div className='overflow-auto'>
+                    <ul className='block text-gray-700 pt-1 h-32'>
+                      {movieList.map(movie => {
+                        return (
+                          <>
+                            <li
+                              className=' rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap'
+                              onClick={onClickMovieName}
+                            >
+                              {movie}
+                            </li>
+                          </>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
             <div className='flex flex-wrap -mx-3 mt-3'>
@@ -123,7 +157,7 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
               <div className='w-full h-full flex justify-center items-center'>
                 <button
                   className=' w-full h-full bg-black'
-                  onClick={showEmojiPicker}
+                  onClick={clickSubmitButton}
                 >
                   create log
                 </button>
