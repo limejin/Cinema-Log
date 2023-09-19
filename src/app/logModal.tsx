@@ -14,12 +14,12 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
   const searchMovie = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value != null) {
       setSearchMovieWord(event.target.value);
+      setMovieName(event.target.value);
     }
   };
 
   const [movieList, setMovieList] = useState<String[]>([]);
 
-  console.log(movieList);
   useEffect(() => {
     (async () => {
       const response = await fetch(
