@@ -2,23 +2,23 @@ import dayjs from 'dayjs';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { useEffect, useState } from 'react';
 
-export default function LogModal(setOpenCreateCinemaLog: any) {
-  const [showEmojiPickerButton, setShowEmojiPickerButton] = useState(false);
-  const [emojiPicked, setEmojiPicked] = useState('❔');
-
+const LogModal = (setOpenCreateCinemaLog: any) => {
+  const [showEmojiPickerButton, setShowEmojiPickerButton] =
+    useState<boolean>(false);
+  const [emojiPicked, setEmojiPicked] = useState<String>('❔');
   const [searchMovieWord, setSearchMovieWord] = useState<String>('');
-
   const [movieName, setMovieName] = useState<
     string | number | readonly string[] | undefined
   >('');
+
   const searchMovie = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value != null) {
       setSearchMovieWord(event.target.value);
       setMovieName(event.target.value);
     }
   };
-
   const [movieList, setMovieList] = useState<String[]>([]);
+  const [logDate, setLogDate] = useState<String>(' ');
 
   useEffect(() => {
     (async () => {
@@ -36,8 +36,9 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
     })();
   }, [searchMovieWord]);
 
-  const [logDate, setLogDate] = useState<String>('');
-  const showEmojiPicker = (event: any) => {
+  const showEmojiPicker = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     event.preventDefault();
     setShowEmojiPickerButton(!showEmojiPickerButton);
   };
@@ -49,6 +50,7 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
       setLogDate(date.format('YYYY-MM-DD'));
     }
   };
+
   const changeEmojiPicked = (emojiData: EmojiClickData, event: MouseEvent) => {
     setEmojiPicked(emojiData.emoji);
     setShowEmojiPickerButton(!showEmojiPickerButton);
@@ -62,15 +64,17 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
   };
 
   const clickSubmitButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setOpenCreateCinemaLog(false);
     //영화 데이터 전송
   };
 
   return (
     <>
-      <div className='fixed top-0 left-0 w-full h-full  bg-green-200 flex   justify-center items-center'>
+      <div className='fixed top-0 left-0 w-full h-full  bg-black flex   justify-center items-center'>
         <div className='w-full max-w-xs'>
           <form className='sw-full max-w-lg  '>
-            <label htmlFor='formFile' className='mb-2 inline-block text-black '>
+            <label htmlFor='formFile' className='mb-2 inline-block text-white '>
               그 날의 로그 사진을 업로드 해주세요
             </label>
             <input
@@ -82,7 +86,7 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
             <div className='flex flex-wrap -mx-3 mt-3'>
               <div className='w-full px-3'>
                 <label
-                  className='block uppercase tracking-wide text-gray-700 font-bold mb-2'
+                  className='block uppercase tracking-wide text-white mb-2'
                   htmlFor='log_date'
                 >
                   날짜
@@ -98,7 +102,7 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
             <div className='flex flex-wrap -mx-3 mt-3'>
               <div className='w-full px-3'>
                 <label
-                  className='block uppercase tracking-wide text-gray-700 font-bold mb-2'
+                  className='block uppercase tracking-wide text-white mb-2'
                   htmlFor='search_movie'
                 >
                   영화 검색
@@ -133,7 +137,7 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
             <div className='flex flex-wrap -mx-3 mt-3'>
               <div className='w-full h-full px-3'>
                 <label
-                  className='block uppercase tracking-wide text-gray-700 mb-2'
+                  className='block uppercase tracking-wide text-white mb-2'
                   htmlFor='search_movie'
                 >
                   그 날의 기분을 골라주세요.
@@ -151,21 +155,24 @@ export default function LogModal(setOpenCreateCinemaLog: any) {
                 )}
               </div>
             </div>
-          </form>
-          <div className='flex flex-wrap -mx-3 mt-6'>
-            <div className='w-full h-full px-3'>
-              <div className='w-full h-full flex justify-center items-center'>
-                <button
-                  className=' w-full h-full bg-black'
-                  onClick={clickSubmitButton}
-                >
-                  create log
-                </button>
+            <div className='flex flex-wrap -mx-3 mt-3'>
+              <div className='w-full h-full px-3'>
+                <div className='w-full h-full flex justify-center items-center'>
+                  <button
+                    className=' appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
+                    onClick={clickSubmitButton}
+                    type='submit'
+                  >
+                    create log
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </>
   );
-}
+};
+
+export default LogModal;

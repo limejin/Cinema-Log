@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <div className='flex flex-col justify-center items-center w-full h-screen bg-black m-0'>
@@ -32,4 +32,6 @@ export default function Home() {
       </div>
     </>
   );
-}
+};
+
+export default Home;

@@ -29,7 +29,7 @@ const cinemaLogs = [
   },
 ];
 
-export default function Home() {
+const Home = () => {
   const today: Dayjs = dayjs();
   const [selectedDay, setSelectedDay] = useState<Dayjs>(today);
   const [currentMonth, setCurrentMonth] = useState<string>(
@@ -39,22 +39,9 @@ export default function Home() {
   const [openCreateCinemaLog, setOpenCreateCinemaLog] =
     useState<boolean>(false);
   let dateOfMonth: Dayjs = dayjs(currentMonth).date(1);
-
   let cinemaLogsOfselectedDay = cinemaLogs.filter(cinemaLog =>
     dayjs(cinemaLog.startTime).isSame(selectedDay, 'day')
   );
-
-  const previousMonth = () => {
-    let previousMonth = dateOfMonth.subtract(1, 'month').format('MMMM YYYY');
-
-    setCurrentMonth(previousMonth);
-  };
-
-  const nextMonth = () => {
-    let nextMonth = dateOfMonth.add(1, 'month').format('MMMM YYYY');
-
-    setCurrentMonth(nextMonth);
-  };
 
   useEffect(() => {
     const year = dateOfMonth.get('year');
@@ -71,6 +58,18 @@ export default function Home() {
     setDaysInCurrentMonth(tempDaysInMonth);
   }, [currentMonth]);
 
+  const previousMonth = () => {
+    let previousMonth = dateOfMonth.subtract(1, 'month').format('MMMM YYYY');
+
+    setCurrentMonth(previousMonth);
+  };
+
+  const nextMonth = () => {
+    let nextMonth = dateOfMonth.add(1, 'month').format('MMMM YYYY');
+
+    setCurrentMonth(nextMonth);
+  };
+
   const selectedDayButtonClick =
     (day: Dayjs) =>
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -83,7 +82,6 @@ export default function Home() {
   };
 
   const createCinemaLog = () => {
-    //정보 입력 팝업 결정
     setOpenCreateCinemaLog(true);
   };
 
@@ -127,7 +125,6 @@ export default function Home() {
                 {daysInCurrentMonth.map((day, dayIndex) => (
                   <div
                     key={day.toString()}
-                    // className={`${colStartClasses[day.get('day')]} py-1.5`}
                     className={filterClassNames(
                       dayIndex === 0 && colStartClasses[day.get('day')],
                       'py-1.5'
@@ -221,4 +218,6 @@ export default function Home() {
       )}
     </>
   );
-}
+};
+
+export default Home;
